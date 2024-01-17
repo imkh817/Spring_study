@@ -1,3 +1,3 @@
 # 👨🏻‍💻 Study Spring
-* vaildation
+* validation
   * spring
