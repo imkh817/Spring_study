@@ -7,9 +7,12 @@ public class User {
 
     private Long userId;
     private String name;
-    private String age;
+    private Integer age;
 
-    public User(String name, String age) {
+    public User(){
+
+    }
+    public User(String name, Integer age) {
         this.name = name;
         this.age = age;
     }

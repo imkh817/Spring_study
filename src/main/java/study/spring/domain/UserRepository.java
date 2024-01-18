@@ -9,7 +9,7 @@ import java.util.Map;
 public class UserRepository {
 
     private final static Map<Long,User> database = new HashMap<>();
-    private static long private Long sequence = 0L;
+    private static Long sequence = 0L;
 
     public User save(User user){
         user.setUserId(++sequence);
