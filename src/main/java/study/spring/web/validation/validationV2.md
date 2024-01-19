@@ -9,7 +9,23 @@ BindingResult는 검증오류를 보관하는 객체다. BindingResult에 검�
 #### 2. 개발자가 직접 넣어주는 경우
 #### 3. validator를 사용하는 경우
 
-## 2️⃣ Field Error
+### 2️⃣ Field Error
 - BindingResult에 보관되는 오류 객체다. FieldError 는 이름 그대로, 필드에 오류가 있는 경우 발생하는 에러다. 필드의 타입이 맞지 않을 때 스프링이 생성할 수도 있고, 개발자가 검증을 수행해서 필드에 오류가 있다면 직접 생성해서 BindingResult 의 addError() 메서드를 통해 넣을수 있다. 생성자는 2개가 있다.
+```java
+public FieldError(String objectName, String field, String defaultMessage);
+public FieldError(String objectName, String field, @Nullable Object rejectedValue, boolean bindingFailure, @Nullable String[] codes, @Nullable Object[] arguments, @Nullable String defaultMessage)
+```
+생성자의 매개변수 목록은 다음과 같다
+ * objectName: 오류가 발생한 객체 이름
+ *  field: 오류 필드
+ *  rejectedValue: 사용자가 입력한 값(거절된 값)
+ *  bindingFailure: 타입 오류 같은 바인딩 실패인지, 검증 실패인지 구분 값
+ *  codes: 메시지 코드
+ *  arguments: 메시지에서 사용하는 인자
+ *  defaultMessage: 기본 오류 메시지
 
-1. public FieldError(String objectName, String field, String defaultMessage);
+### 참고🤩
+#### ❗️bindingResult로 넘긴 오류 이름과 필드명이 같아야 뷰 단에서 thymeleaf의 th:errors를 사용할 수 있다.
+#### ❗️th:errors는 Thymeleaf에서 해당 필드에 대한 오류 메시지를 자동으로 표시하는 역할을 한다. 
+#### ❗️이는 해당 필드에 오류가 있을 때에만 오류 메시지를 보여주도록 Thymeleaf가 처리하게 된다. 
+#### ❗️따라서 th:text를 사용하여 직접 메시지를 지정할 필요 없이, th:errors만으로도 해당 필드의 오류 메시지를 표시할 수 있습니다.
