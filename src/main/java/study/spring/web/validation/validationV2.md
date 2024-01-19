@@ -13,7 +13,7 @@ BindingResult는 검증오류를 보관하는 객체다. BindingResult에 검�
 - BindingResult에 보관되는 오류 객체다. FieldError 는 이름 그대로, 필드에 오류가 있는 경우 발생하는 에러다. 필드의 타입이 맞지 않을 때 스프링이 생성할 수도 있고, 개발자가 검증을 수행해서 필드에 오류가 있다면 직접 생성해서 BindingResult 의 addError() 메서드를 통해 넣을수 있다. 생성자는 2개가 있다.
 ```java
 public FieldError(String objectName, String field, String defaultMessage);
-public FieldError(String objectName, String field, @Nullable Object rejectedValue, boolean bindingFailure, @Nullable String[] codes, @Nullable Object[] arguments, @Nullable String defaultMessage)
+public FieldError(String objectName, String field, @Nullable Object rejectedValue, boolean bindingFailure, @Nullable String[] codes, @Nullable Object[] arguments, @Nullable String defaultMessage);
 ```
 생성자의 매개변수 목록은 다음과 같다
  * objectName: 오류가 발생한 객체 이름
