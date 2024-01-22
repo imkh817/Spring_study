@@ -6,15 +6,16 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.DataBinder;
 import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import study.spring.domain.User;
 import study.spring.domain.UserRepository;
+import study.spring.web.validator.userValidator;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -27,6 +28,12 @@ public class ValidateUserControllerV2 {
 
     // @RequiredArgsConstructor 로 final이 붙은 필드 생성자 생성, 생성자가 하나면 @Autowired 생략가능
     private final UserRepository userRepository;
+    private final userValidator validator;
+
+    @InitBinder
+    public void init(WebDataBinder dataBinder){ // 이 컨트롤러가 호출될때마다 검증기가 작동한다.
+        dataBinder.addValidators(validator);
+    }
 
     @GetMapping("/add")
     public String addForm(Model model){
@@ -96,10 +103,9 @@ public class ValidateUserControllerV2 {
 
     }
 
-    @PostMapping("/add")
+    //@PostMapping("/add")
     public String validationV3(@ModelAttribute User user, BindingResult bindingResult,
                                RedirectAttributes redirectAttributes,Model model){
-        log.info("V3진입");
         if(!StringUtils.hasText(user.getName())){
            bindingResult.rejectValue("name","required.user.name");
         }
@@ -113,6 +119,51 @@ public class ValidateUserControllerV2 {
             // ObjectName, Default Message
             bindingResult.reject("required.user.nameAge");
         }
+
+        // 검증 실패시 다시 addForm 으로
+        if(bindingResult.hasErrors()){
+            log.info("errors={}",bindingResult);
+            return "validation/v2/addForm";
+        }
+
+        // 성공 로직
+        User saveUser = userRepository.save(user);
+        redirectAttributes.addAttribute("userId",saveUser.getUserId());
+        redirectAttributes.addAttribute("status",true);
+        return "redirect:/validation/v2/users/{userId}";
+
+    }
+
+    //@PostMapping("/add")
+    public String validationV4(@ModelAttribute User user, BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes,Model model){
+
+        // 검증하는 부분을 검증 클래스 userValidator에 작성하였다.
+        if(validator.supports(User.class)){
+            validator.validate(user,bindingResult);
+        }
+
+        // 검증 실패시 다시 addForm 으로
+        if(bindingResult.hasErrors()){
+            log.info("errors={}",bindingResult);
+            return "validation/v2/addForm";
+        }
+
+        // 성공 로직
+        User saveUser = userRepository.save(user);
+        redirectAttributes.addAttribute("userId",saveUser.getUserId());
+        redirectAttributes.addAttribute("status",true);
+        return "redirect:/validation/v2/users/{userId}";
+
+    }
+    @PostMapping("/add")
+    public String validationV5(@Validated @ModelAttribute User user, BindingResult bindingResult,
+                               RedirectAttributes redirectAttributes, Model model){
+        // @Validated를 쓰므로써 검증기가 알아서 검증을 돌려주고 에러들을 bindingResult에 담아놓는다.
+        // @Validated를 안썻을시 검증하는 부분을 검증 클래스 userValidator에 작성하였고, 그걸 호출해주었다.
+        /*if(validator.supports(User.class)){
+            validator.validate(user,bindingResult);
+        }*/
 
         // 검증 실패시 다시 addForm 으로
         if(bindingResult.hasErrors()){
