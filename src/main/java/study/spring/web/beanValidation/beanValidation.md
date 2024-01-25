@@ -26,6 +26,7 @@ private Integer quantity;
 동일한 모델 객체를 등록할 때와 수정할 때 각각 다르게 검증하는 방법을 알아보자.<br><br>
 **방법1) BeanValidation의 groups 기능을 사용한다.<br>**
 **방법2) Item을 직접 사용하지 않고, ItemSaveForm, ItemUpdateForm 같은 폼 전송을 위한 별도의 모델 객체를 만들 어서 사용한다.<br>**
+*****
 
 ### 3️⃣ Form 전송 객체 분리
 실무에서는 `groups` 를 잘 사용하지 않는데, 그 이유가 다른 곳에 있다. 바로 등록시 폼에서 전달하는 데이터가 `User` 도메인 객체와 딱 맞지 않기 때문이다.<br>
