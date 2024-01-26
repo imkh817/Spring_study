@@ -2,7 +2,9 @@ package study.spring.domain;
 
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Repository
@@ -19,5 +21,9 @@ public class UserRepository {
 
     public User findById(Long userId){
         return database.get(userId);
+    }
+
+    public List<User> findAll(){
+        return new ArrayList<>(database.values());
     }
 }

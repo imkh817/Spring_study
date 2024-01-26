@@ -12,6 +12,8 @@ import study.spring.domain.User;
 import study.spring.domain.UserEditForm;
 import study.spring.domain.UserRepository;
 
+import java.util.List;
+
 @Controller
 @Slf4j
 @RequestMapping("/beanValidation/user")
@@ -43,6 +45,12 @@ public class BeanValidationUserController {
         redirectAttributes.addAttribute("status",true);
         return "redirect:/beanValidation/users/{userId}";
 
+    }
+    @GetMapping("/list")
+    public String listForm(){
+        List<User> list = userRepository.findAll();
+        log.info("list={}",list);
+        return "";
     }
 
     @GetMapping ("/edit/{userId}")

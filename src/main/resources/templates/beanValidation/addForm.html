@@ -7,13 +7,29 @@
 <body>
 
 <form action="" method="" th:object="${user}">
+    <div th:if="${#fields.hasErrors()}">
+        <p class="field-error" th:each="err:${#fields.globalErrors()}" th:text="err">전체 오류 메시지</p>
+    </div>
     <div>
         <label>이름</label>
-        <input type="text" id="name" name="name" th:field="*{name}">
-
+        <input type="text" id="name" name="name" th:field="*{name}"
+            th:errorclass="field-error" class="form-control" placeholder="이름을 입력하세요">
+        <div class="field-error" th:errors="*{name}">
+            이름 오류
+        </div>
     </div>
-    <
-
+    <div>
+        <label>나이</label>
+        <input type="text" id="age" name="age" th:field="*{age}"
+            th:errorclass="field-error" class="form-control" placeholder="나이를 입력하세요">
+        <div class="field-error" th:errors="*{name}">
+            나이 오류
+        </div>
+    </div>
+    <div class="col">
+        <input type="submit" value="등록">
+        <input type="button" value="취소">
+    </div>
 
 </form>
 
