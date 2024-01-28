@@ -12,7 +12,7 @@ public class UserEditForm {
     @NotNull
     private Long userId;
 
-    @NotBlank
+    @NotBlank(message = "성명을 입력해주세요.")
     private String name;
 
     @Range(min = 1, max = 100)
